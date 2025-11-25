@@ -3,7 +3,7 @@ name: Build & Deploy to AWS ECR + AppRunner
 on:
   # Trigger this workflow when code is pushed to main branch
   push:
-    branches: ["main"]
+    branches: ["dev"]
 
 jobs:
   build-deploy:
