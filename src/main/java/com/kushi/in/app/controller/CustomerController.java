@@ -98,6 +98,17 @@ public class CustomerController {
         return customerService.getCompletedBookings();
     }
 
+    // Get bookings by email (for checking Razorpay payment data)
+    @GetMapping("/by-email/{email}")
+    public ResponseEntity<List<Customer>> getBookingsByEmail(@PathVariable String email) {
+        try {
+            List<Customer> bookings = customerService.getBookingsByEmail(email);
+            return ResponseEntity.ok(bookings);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);
+        }
+    }
+
     // ===========================
     // Service Management Endpoints
     // ===========================
