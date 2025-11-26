@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import static com.kushi.in.app.config.AppConstants.*;
+
 @Configuration
 public class CorsConfig {
 
@@ -15,12 +17,10 @@ public class CorsConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins(
-                            "http://localhost:5173",
-                            "http://localhost:3000",
-                            "https://main.dhtawzq4yzgjo.amplifyapp.com",
-                            "https://bredongroups.com",
-                            "https://kushiservices.com",
-                            "https://www.kushiservices.com"
+                            AMPLIFY_DEV_URL
+                            // AMPLIFY_APP_URL,
+                            // BREDON_GROUPS_URL,
+                            // KUSHI_SERVICES_URL
                         )
                         .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
