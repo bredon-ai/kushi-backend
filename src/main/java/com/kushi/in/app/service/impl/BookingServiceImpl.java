@@ -8,8 +8,6 @@ import com.kushi.in.app.service.BookingService;
 import com.kushi.in.app.service.NotificationService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -20,9 +18,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class BookingServiceImpl implements BookingService {
-
-    @Autowired
-    private JavaMailSender mailSender;
 
     private final BookingRepository bookingRepository;
     private final CustomerRepository customerRepository;
