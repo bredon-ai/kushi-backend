@@ -12,11 +12,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.kushi.in.app.config.AppConstants.*;
-
 @RestController
 @RequestMapping("/api/login")
-@CrossOrigin(origins = {AMPLIFY_DEV_URL}, allowCredentials = "true") // {KUSHI_SERVICES_URL, KUSHI_SERVICES_WWW_URL}, allowCredentials = "true") // Allow from any frontend
+@CrossOrigin(origins = {"https://kushiservices.com","https://www.kushiservices.com"},allowCredentials = "true") // Allow from any frontend
 public class LoginController {
 
     @Autowired

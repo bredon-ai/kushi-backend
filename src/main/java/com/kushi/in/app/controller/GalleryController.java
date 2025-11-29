@@ -11,11 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.Map;
 
-import static com.kushi.in.app.config.AppConstants.*;
-
 @RestController
 @RequestMapping("/api/gallery")
-@CrossOrigin(origins = {AMPLIFY_DEV_URL}) // {KUSHI_SERVICES_URL, KUSHI_SERVICES_WWW_URL})
+@CrossOrigin(origins = {"https://kushiservices.com","https://www.kushiservices.com"})
 public class GalleryController {
 
     @Autowired

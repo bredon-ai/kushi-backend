@@ -4,7 +4,6 @@ import com.kushi.in.app.dao.LoginRepository;
 import com.kushi.in.app.entity.Login;
 import com.kushi.in.app.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,15 +14,13 @@ public class LoginServiceImpl implements LoginService {
 
     @Autowired
     private LoginRepository loginRepository;
-    
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 
     @Override
     public Login loginAdmin(String email, String password) {
         return loginRepository.findByEmail(email)
                 .filter(user -> user.getEmail().equals(email))      // ✅ case-sensitive email
-                .filter(user -> passwordEncoder.matches(password, user.getPassword())) // ✅ BCrypt password verification
+                .filter(user -> user.getPassword().equals(password)) // ✅ case-sensitive password
                 .orElse(null);
     }
 
@@ -40,15 +37,7 @@ public class LoginServiceImpl implements LoginService {
             existingAdmin.setAdminname(updatedAdmin.getAdminname());
             existingAdmin.setEmail(updatedAdmin.getEmail());
             existingAdmin.setPhoneNumber(updatedAdmin.getPhoneNumber());
-            // ✅ Only update password if it's provided and not already hashed
-            if (updatedAdmin.getPassword() != null && !updatedAdmin.getPassword().isEmpty()) {
-                // Check if password is already hashed (BCrypt hashes start with $2a$, $2b$, or $2y$)
-                if (!updatedAdmin.getPassword().startsWith("$2")) {
-                    existingAdmin.setPassword(passwordEncoder.encode(updatedAdmin.getPassword()));
-                } else {
-                    existingAdmin.setPassword(updatedAdmin.getPassword());
-                }
-            }
+            existingAdmin.setPassword(updatedAdmin.getPassword());
             existingAdmin.setRole(updatedAdmin.getRole());
             return loginRepository.save(existingAdmin);
         }).orElse(null);
@@ -60,13 +49,11 @@ public class LoginServiceImpl implements LoginService {
         Login admin = loginRepository.findById(adminId)
                 .orElseThrow(() -> new RuntimeException("Admin not found"));
 
-        // ✅ Verify old password with BCrypt
-        if (!passwordEncoder.matches(oldPassword, admin.getPassword())) {
+        if (!admin.getPassword().equals(oldPassword)) {
             throw new RuntimeException("Old password is incorrect");
         }
 
-        // ✅ Hash new password with BCrypt
-        admin.setPassword(passwordEncoder.encode(newPassword));
+        admin.setPassword(newPassword);
         return loginRepository.save(admin);
     }
 
@@ -78,10 +65,6 @@ public class LoginServiceImpl implements LoginService {
         }
         if (login.getPhoneNumber() != null && loginRepository.existsByPhoneNumber(login.getPhoneNumber())) {
             throw new RuntimeException("❌ Phone number already exists!");
-        }
-        // ✅ Hash password before saving new user
-        if (login.getPassword() != null && !login.getPassword().isEmpty()) {
-            login.setPassword(passwordEncoder.encode(login.getPassword()));
         }
         return loginRepository.save(login);
     }
@@ -110,8 +93,7 @@ public class LoginServiceImpl implements LoginService {
         Login user = loginRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("❌ User not found"));
 
-        // ✅ Hash password with BCrypt
-        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setPassword(newPassword); // ⚡ here you can also encode password if needed
         loginRepository.save(user);
     }
 

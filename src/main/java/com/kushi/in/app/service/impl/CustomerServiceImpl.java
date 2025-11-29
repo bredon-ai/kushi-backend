@@ -113,11 +113,6 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Customer> getBookingsByEmail(String email) {
-        return customerRepository.findByCustomerEmailOrderByBookingIdDesc(email);
-    }
-
-    @Override
     public List<Customer> getCustomersByBookingStatus(String status) {
         return customerRepository.findByBookingStatus(status);
     }
